@@ -1,0 +1,158 @@
+'GameView
+GraphicsWindow.Show()
+GraphicsWindow.Title = "🕹 Ball-Paddle 2Players 🎮"
+GraphicsWindow.BrushColor = "Black"
+res1 = 0
+txt1 = Shapes.AddText(res1)
+Shapes.Move(txt1, 542, 570)
+res2 = 0
+txt2 = Shapes.AddText(res2)
+Shapes.Move(txt2, 452, 570)
+W = 1000
+H = 600
+GraphicsWindow.Width = W
+GraphicsWindow.Height = H
+GraphicsWindow.CanResize = "False"
+GraphicsWindow.BackgroundColor = "Black"
+GraphicsWindow.PenColor = "Black"
+GraphicsWindow.BrushColor = "White"
+GraphicsWindow.FillRectangle(5, 5, W, H-100)
+GraphicsWindow.FillRectangle(5, 510, W , 95)
+footpage =  ImageList.LoadImage("footpage.png")
+GraphicsWindow.DrawImage(footpage, 7, 510)
+Controls.SetSize(footpage, W-5, 100)
+GraphicsWindow.BrushColor = "Black"
+GraphicsWindow.DrawRectangle(530, 565, 35, 25)
+GraphicsWindow.DrawRectangle(440, 565, 35, 25)
+
+'Paddle1
+xp1 = 5
+yp1 = 200 - hp1/2
+wp1 = 30
+hp1 = 150
+GraphicsWindow.PenWidth= 4
+GraphicsWindow.PenColor = "Blue"
+GraphicsWindow.BrushColor = "Black"
+p1 = Shapes.AddRectangle(wp1, hp1)
+Shapes.Move(p1, xp1, yp1)
+
+'Paddle2
+xp2 = W - 25 
+yp2 = 200 - hp2/2
+wp2 = 30
+hp2 = 150
+GraphicsWindow.PenWidth= 4
+GraphicsWindow.PenColor = "Red"
+GraphicsWindow.BrushColor = "Black"
+p2 = Shapes.AddRectangle(wp2, hp2)
+Shapes.Move(p2, xp2, yp2)
+
+Start :
+'Ball
+xb = 500 - rb
+randomY = Math.GetRandomNumber(H-125)
+If randomY > 20 And randomY < H-125 Then
+  yb = randomY
+Else
+  yb = 200 - rb
+EndIf
+rb = 15
+GraphicsWindow.PenWidth= 4
+GraphicsWindow.PenColor = "Black"
+GraphicsWindow.BrushColor = "Cyan"
+b = Shapes.AddEllipse(2*rb, 2*rb)
+Shapes.Move(b, xb, yb)
+
+'GmaeStart
+randomDx = Math.GetRandomNumber(2)
+If randomDx = 2 Then
+  randomDx = -6
+Else
+  randomDx = 6
+EndIf
+randomDy = Math.GetRandomNumber(2)
+If randomDy = 2 Then
+  randomDy = -6
+Else
+  randomDy = 6
+EndIf
+Dx = randomDx
+Dy = randomDy
+While xb > 5 And xb < 975
+PaddlesPosition()
+KeyDown1()
+KeyDown2()
+  xb = xb + Dx
+  yb = yb + Dy
+    If (yb < 5) Or (yb > 500-2*rb) Then
+      Dy = -Dy
+    EndIf
+  xp1= Shapes.GetLeft(p1)
+  If (xb < xp1+wp1) And ( yb > yp1-2*rb ) And ( yb < yp1+hp1 ) Then
+    Dx = -Dx
+  ElseIf (xb < xp1+wp1) And ( yb = yp1-2*rb ) And ( yb = yp1+hp1 ) Then
+    Dx = -Dx
+    Dy = -Dy
+  EndIf
+  xp2= Shapes.GetLeft(p2)
+  If (xb > xp2-wp2) And ( yb > yp2-2*rb ) And ( yb < yp2+hp2 ) Then
+    Dx = -Dx
+  ElseIf (xb > xp2-wp2) And ( yb > yp2-2*rb ) And ( yb < yp2+hp2 ) Then
+    Dx = -Dx
+    Dy = -Dy
+  EndIf
+  Program.Delay(10)
+  Shapes.Move(b, xb, yb)
+EndWhile
+UpdateResults()
+Program.Delay(250)
+Controls.Remove(b)
+Goto Start
+
+'Subroutines
+Sub KeyDown1
+  key1 = GraphicsWindow.LastKey
+  xp1 = Shapes.GetLeft(p1)
+  If key1 = "Up" Then
+    yp1 = yp1 - 5
+    Shapes.Move(p1, xp1, yp1)
+  ElseIf key1 = "Down" Then
+    yp1 = yp1 + 5
+    Shapes.Move(p1, xp1, yp1)
+  EndIf
+EndSub
+Sub KeyDown2
+  key2 = GraphicsWindow.LastKey
+  xp2 = Shapes.GetLeft(p2)
+  If key2 = "NumPad8" Then
+    yp2 = yp2 - 5
+    Shapes.Move(p2, xp2, yp2)
+  ElseIf key2 = "NumPad2" Then
+    yp2 = yp2 + 5
+    Shapes.Move(p2, xp2, yp2)
+  EndIf
+EndSub
+Sub PaddlesPosition
+  If (yp1 < 10) Then
+    yp1 = yp1 + 5
+  EndIf
+  If (yp1+hp1 > 500) Then
+    yp1 = yp1 - 5
+  EndIf
+  If (yp2 < 10) Then
+    yp2 = yp2 + 5
+  EndIf
+  If (yp2+hp2 > 500) Then
+    yp2 = yp2 - 5
+  EndIf
+EndSub
+Sub UpdateResults
+  If ( xb <= 5) Then
+    res2 = res2 + 1
+    Shapes.SetText(txt1, res2)
+  EndIf
+  If ( xb >= 975) Then
+    res1 = res1 + 1
+    Shapes.SetText(txt2, res1)
+  EndIf
+EndSub
