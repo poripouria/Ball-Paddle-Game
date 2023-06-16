@@ -18,7 +18,7 @@ GraphicsWindow.PenColor = "Black"
 GraphicsWindow.BrushColor = "White"
 GraphicsWindow.FillRectangle(5, 5, W, H-100)
 GraphicsWindow.FillRectangle(5, 510, W , 95)
-footpage =  ImageList.LoadImage("footpage.png")
+footpage =  ImageList.LoadImage("_Data\footpage.png")
 GraphicsWindow.DrawImage(footpage, 7, 510)
 Controls.SetSize(footpage, W-5, 100)
 GraphicsWindow.BrushColor = "Black"
@@ -78,12 +78,12 @@ Else
 EndIf
 Dx = randomDx
 Dy = randomDy
+bv = 1
 While xb > 5 And xb < 975
-PaddlesPosition()
-KeyDown1()
-KeyDown2()
-  xb = xb + Dx
-  yb = yb + Dy
+  PaddlesPosition()
+  KeyDown()
+  xb = xb + Dx*bv
+  yb = yb + Dy*bv
     If (yb < 5) Or (yb > 500-2*rb) Then
       Dy = -Dy
     EndIf
@@ -103,6 +103,7 @@ KeyDown2()
   EndIf
   Program.Delay(10)
   Shapes.Move(b, xb, yb)
+  bv = bv + 0.00035
 EndWhile
 UpdateResults()
 Program.Delay(250)
@@ -114,10 +115,10 @@ Sub KeyDown1
   key1 = GraphicsWindow.LastKey
   xp1 = Shapes.GetLeft(p1)
   If key1 = "Up" Then
-    yp1 = yp1 - 5
+    yp1 = yp1 - 6
     Shapes.Move(p1, xp1, yp1)
   ElseIf key1 = "Down" Then
-    yp1 = yp1 + 5
+    yp1 = yp1 + 6
     Shapes.Move(p1, xp1, yp1)
   EndIf
 EndSub
@@ -125,25 +126,29 @@ Sub KeyDown2
   key2 = GraphicsWindow.LastKey
   xp2 = Shapes.GetLeft(p2)
   If key2 = "NumPad8" Then
-    yp2 = yp2 - 5
+    yp2 = yp2 - 6
     Shapes.Move(p2, xp2, yp2)
   ElseIf key2 = "NumPad2" Then
-    yp2 = yp2 + 5
+    yp2 = yp2 + 6
     Shapes.Move(p2, xp2, yp2)
   EndIf
 EndSub
+Sub KeyDown
+  KeyDown1()
+  KeyDown2()
+EndSub
 Sub PaddlesPosition
   If (yp1 < 10) Then
-    yp1 = yp1 + 5
+    yp1 = yp1 + 6
   EndIf
   If (yp1+hp1 > 500) Then
-    yp1 = yp1 - 5
+    yp1 = yp1 - 6
   EndIf
   If (yp2 < 10) Then
-    yp2 = yp2 + 5
+    yp2 = yp2 + 6
   EndIf
   If (yp2+hp2 > 500) Then
-    yp2 = yp2 - 5
+    yp2 = yp2 - 6
   EndIf
 EndSub
 Sub UpdateResults
