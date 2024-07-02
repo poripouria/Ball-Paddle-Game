@@ -2,6 +2,6 @@
 Ball and Paddle by 2 players game in Small-Basic language.
 <p align="center">
     <a>
-        <img src="overview.png">
+        <img src="Overview.png">
     </a>
 </p>
